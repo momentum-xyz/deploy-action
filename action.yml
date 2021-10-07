@@ -18,6 +18,7 @@ runs:
     - name: "Set K8S creds"
       env:
         K8CRED: ${{ secrets[inputs.k8s-credential-name] }}
+      shell: bash
       run: |
         echo "$K8CRED" >> tout.txt
         k8s_name=$(echo $K8CRED | jq -r '.cluster_name')
@@ -32,5 +33,6 @@ runs:
         cluster-name: ${{env.K8S_NAME}}
         resource-group: ${{env.K8S_GROUP}}
     - name: "Rollout"
+      shell: bash
       run: |
         kubectl rollout restart deployment "${{ inputs.project }}-deployment"
