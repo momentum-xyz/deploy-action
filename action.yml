@@ -20,7 +20,6 @@ runs:
         K8CRED: ${{ inputs.k8s-credentials }}
       shell: bash
       run: |
-        echo "$K8CRED" >> tout.txt
         k8s_name=$(echo $K8CRED | jq -r '.cluster_name')
         echo "K8S_NAME=$k8s_name" >> $GITHUB_ENV
         k8s_group=$(echo $K8CRED | jq -r '.cluster_group')
