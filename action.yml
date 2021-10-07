@@ -1,0 +1,36 @@
+name: 'Odyssey momentum deploy action'
+description: 'Deploy Odyssey project to their environment'
+inputs:
+  project:
+    description: "The name of the project to deploy."
+    required: true
+    default: ${{ github.event.repository.name }}
+  version:
+    description: "The version to deploy"
+    required: true
+  k8s-credential-name:
+    description: "Name of the secret to use for Kubernetes credentials."
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Set K8S creds"
+      env:
+        K8CRED: ${{ secrets[inputs.k8s-credential-name] }}
+      run: |
+        echo "$K8CRED" >> tout.txt
+        k8s_name=$(echo $K8CRED | jq -r '.cluster_name')
+        echo "K8S_NAME=$k8s_name" >> $GITHUB_ENV
+        k8s_group=$(echo $K8CRED | jq -r '.cluster_group')
+        echo "K8S_GROUP=$k8s_group" >> $GITHUB_ENV
+        k8s_creds=$(echo $K8CRED | jq -r '.credential' | tr -d '\n')
+        echo "K8S_CREDS=$k8s_creds" >> $GITHUB_ENV
+    - uses: Azure/aks-set-context@v1
+      with:
+        creds: ${{env.K8S_CREDS}}
+        cluster-name: ${{env.K8S_NAME}}
+        resource-group: ${{env.K8S_GROUP}}
+    - name: "Rollout"
+      run: |
+        kubectl rollout restart deployment "${{ inputs.project }}-deployment"
