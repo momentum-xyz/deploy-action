@@ -15,11 +15,10 @@ Requires the project to be build (so docker images pushed which can be picked up
         with:
           project-name: ${{ env.PROJECT_NAME }}
           version: ${{ env.VERSION }}
-          k8s-credential-name: ${{ secrets.REF_K8S_DEV }}
+          k8s-credentials: ${{ secrets[secrets.REF_K8S_DEV] }}
 ```
 
-
-This requires there is a Github secret with Kubernetes credentials (JSON), with the name given by the `k8s-credential-name` input. This specifies which Kubernetes environment is deployed to.
+This requires there is a Github secret with Kubernetes credentials (JSON), to pass as the `k8s-crentials` input. As a string with JSON (cluster_name, cluster_group and credential fields). This specifies which Kubernetes environment is deployed to.
 The repository name is used by default as the project name, which should have a <name>-deployment resource in Kubernetes.
 
 ### Inputs
@@ -27,5 +26,5 @@ The repository name is used by default as the project name, which should have a 
 | --- | --- | --- |
 | `project` | Name of the project to deploy | The name of the repository |
 | `version` | (**required**) Version |  |
-| `k8s-credential-name` | (**required**) Name of the secret to use for Kubernetes credentials. |  |
+| `k8s-credentials` | (**required**) Kubernetes credentials |  |
 

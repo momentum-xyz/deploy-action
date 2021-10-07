@@ -6,10 +6,10 @@ inputs:
     required: true
     default: ${{ github.event.repository.name }}
   version:
-    description: "The version to deploy"
+    description: "The version to deploy."
     required: true
-  k8s-credential-name:
-    description: "Name of the secret to use for Kubernetes credentials."
+  k8s-credentials:
+    description: "Kubernetes credentials (JSON)."
     required: true
 
 runs:
@@ -17,7 +17,7 @@ runs:
   steps:
     - name: "Set K8S creds"
       env:
-        K8CRED: ${{ secrets[inputs.k8s-credential-name] }}
+        K8CRED: ${{ inputs.k8s-credentials }}
       shell: bash
       run: |
         echo "$K8CRED" >> tout.txt
