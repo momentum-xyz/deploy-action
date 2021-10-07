@@ -35,3 +35,4 @@ runs:
       shell: bash
       run: |
         kubectl rollout restart deployment "${{ inputs.project }}-deployment"
+        kubectl rollout status deployment "${{ inputs.project }}-deployment" --timeout=5m
