@@ -26,7 +26,7 @@ runs:
         echo "K8S_GROUP=$k8s_group" >> $GITHUB_ENV
         k8s_creds=$(echo $K8CRED | jq -r '.credential' | tr -d '\n')
         echo "K8S_CREDS=$k8s_creds" >> $GITHUB_ENV
-    - uses: azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2  # v1.4.6
+    - uses: azure/login@de95379fe4dadc2defb305917eaa7e5dde727294  # v1.4.6
       with:
          creds: ${{env.K8S_CREDS}}
     - uses: Azure/aks-set-context@4edaee69f820359371ee8bc85189ac03a21d3a58  # v3.2
